@@ -6,7 +6,7 @@ export class AppController {
   
 
   @Get()
-  getHello(): string {
+  getIndex(): string {
     return 'Zdravo Svete!';
   }
 }
