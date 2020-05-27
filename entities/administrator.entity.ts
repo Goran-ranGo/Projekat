@@ -3,7 +3,7 @@ import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 @Entity()
 export class Administrator {
     @PrimaryGeneratedColumn({
-        name: 'administrator:id',
+        name: 'administrator_id',
         type: 'int',
         unsigned: true
     })
