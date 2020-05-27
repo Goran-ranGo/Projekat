@@ -1,0 +1,26 @@
+import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+
+@Entity()
+export class Administrator {
+    @PrimaryGeneratedColumn({
+        name: 'administrator:id',
+        type: 'int',
+        unsigned: true
+    })
+    administratorId: number;
+
+    @Column({
+        type: 'varchar',
+        length: '32',
+        unique: true
+    })
+    username: string;
+
+    @Column({
+        name: 'password_hash',
+        type: 'varchar',
+        length: '128'
+    })
+    passwordHash: string;
+
+}
