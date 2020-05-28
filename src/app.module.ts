@@ -46,7 +46,9 @@ import { ArticleController } from './controllers/api/article.controller';
     TypeOrmModule.forFeature([ 
       Administrator,
       Category,
-      Article
+      Article,
+      ArticlePrice,
+      ArticleFeature
     ])
   ],
   controllers: [
