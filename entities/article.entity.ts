@@ -81,6 +81,7 @@ export class Article {
 
   // ovu relaciju dodajemo u v_043 45:03
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   @ManyToMany(type => Feature, feature => feature.articles)
   @JoinTable({
     name: "article_feature",
