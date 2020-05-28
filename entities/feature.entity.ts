@@ -5,10 +5,13 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
-  PrimaryGeneratedColumn
+  PrimaryGeneratedColumn,
+  ManyToMany,
+  JoinTable
 } from "typeorm";
 import { ArticleFeature } from "./article-feature.entity";
 import { Category } from "./category.entity";
+import { Article } from "./article.entity";
 
 @Index("uq_feature_name_category_id", ["name", "categoryId"], { unique: true })
 @Index("fk_feature_category_id", ["categoryId"], {})
@@ -35,6 +38,16 @@ export class Feature {
     articleFeature => articleFeature.feature
   )
   articleFeatures: ArticleFeature[];
+
+  // ovu relaciju dodajemo u v_043 50:20
+
+  @ManyToMany(type => Article, article => article.features)
+  @JoinTable({
+    name: "article_feature",
+    joinColumn: { name: "feature_id", referencedColumnName: "featureId" },
+    inverseJoinColumn: { name: "article_id", referencedColumnName: "articleId" }
+  })
+  articles: Article[];
 
   @ManyToOne(
     () => Category,

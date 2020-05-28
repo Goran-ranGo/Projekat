@@ -5,13 +5,16 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
-  PrimaryGeneratedColumn
+  PrimaryGeneratedColumn,
+  ManyToMany,
+  JoinTable
 } from "typeorm";
 import { Category } from "./category.entity";
 import { ArticleFeature } from "./article-feature.entity";
 import { ArticlePrice } from "./article-price.entity";
 import { CartArticle } from "./cart-article.entity";
 import { Photo } from "./photo.entity";
+import { Feature } from "./feature.entity"; // importovano u v_043 45:55
 
 @Index("fk_article_category_id", ["categoryId"], {})
 @Entity("article")
@@ -75,6 +78,16 @@ export class Article {
     articleFeature => articleFeature.article
   )
   articleFeatures: ArticleFeature[];
+
+  // ovu relaciju dodajemo u v_043 45:03
+
+  @ManyToMany(type => Feature, feature => feature.articles)
+  @JoinTable({
+    name: "article_feature",
+    joinColumn: { name: "article_id", referencedColumnName: "articleId" },
+    inverseJoinColumn: { name: "feature_id", referencedColumnName: "featureId" }
+  })
+  features: Feature[];
 
   @OneToMany(
     () => ArticlePrice,

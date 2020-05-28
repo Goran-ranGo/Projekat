@@ -17,6 +17,8 @@ import { User } from 'entities/user.entity';
 import { AdministratorController } from './controllers/api/administrator.controller';
 import { CategoryController } from './controllers/api/category.controller';
 import { CategoryService } from './services/category/category.service';
+import { ArticleService } from './services/article/article.service';
+import { ArticleController } from './controllers/api/article.controller';
 
 @Module({
   imports: [
@@ -43,17 +45,20 @@ import { CategoryService } from './services/category/category.service';
     }),
     TypeOrmModule.forFeature([ 
       Administrator,
-      Category
+      Category,
+      Article
     ])
   ],
   controllers: [
     AppController,
     AdministratorController,
-    CategoryController
+    CategoryController,
+    ArticleController
   ],
   providers: [
     AdministratorService,
-    CategoryService
+    CategoryService,
+    ArticleService
   ],
 })
 export class AppModule {}
