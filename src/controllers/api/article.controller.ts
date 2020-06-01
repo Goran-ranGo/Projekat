@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable prefer-const */
-import { Controller, Post, Body, Param, UseInterceptors, UploadedFile, Req } from "@nestjs/common";
+import { Controller, Post, Body, Param, UseInterceptors, UploadedFile, Req, Delete } from "@nestjs/common";
 import { Crud } from "@nestjsx/crud";
 import { Article } from "src/entities/article.entity";
 import { ArticleService } from "src/services/article/article.service";
@@ -176,4 +176,41 @@ export class ArticleController {
             })
             .toFile(destinationFilePath);
     }
+
+    // http://localhost:3000/api/article/1/deletePhoto/45/
+    @Delete(':articleId/deletePhoto/:photoId/')
+    public async deletePhoto(
+        @Param('articleId') articleId: number,
+        @Param('photoId') photoId: number
+        ) {
+            const photo = await this.photoService.findOne({ // pokušaj da nađeš konkretnu fotografiju sa sledećim parametrima
+                articleId: articleId,
+                photoId: photoId
+            });
+
+            if (!photo) {
+                return new ApiResponse('error', -4004, 'Photo not found!');
+            }
+
+            try {
+                fs.unlinkSync(StorageConfig.photo.destination + photo.imagePath);
+                fs.unlinkSync(StorageConfig.photo.destination + StorageConfig.photo.resize.thumb.directory + photo.imagePath);
+                fs.unlinkSync(StorageConfig.photo.destination + StorageConfig.photo.resize.small.directory+ photo.imagePath);
+            } catch (e){
+
+            }
+            
+
+
+            const deleteResult = await this.photoService.deletById(photoId);
+
+            if(deleteResult.affected === 0) {
+                return new ApiResponse('error', -4004, "Photo not found!");
+            }
+
+            return new ApiResponse('ok', 0, "One photo deleted!");
+
+        }
+
+
 }
