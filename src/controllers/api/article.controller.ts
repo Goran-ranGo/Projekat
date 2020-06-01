@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable prefer-const */
-import { Controller, Post, Body, Param, UseInterceptors, UploadedFile, Req, Delete } from "@nestjs/common";
+import { Controller, Post, Body, Param, UseInterceptors, UploadedFile, Req, Delete, Patch } from "@nestjs/common";
 import { Crud } from "@nestjsx/crud";
 import { Article } from "src/entities/article.entity";
 import { ArticleService } from "src/services/article/article.service";
@@ -14,6 +14,7 @@ import { ApiResponse } from "src/misc/api.response.class";
 import * as fileType from 'file-type';
 import * as fs from 'fs';
 import * as sharp from 'sharp';
+import { EditArticleDto } from "src/dtos/article/edit.article.dto";
 
 
 @Controller('api/article')
@@ -46,6 +47,9 @@ import * as sharp from 'sharp';
                 eager: true
             }
         }
+    },
+    routes: {
+        exclude: ['updateOneBase', 'replaceOneBase', 'deleteOneBase'] // v_054 27:00
     }
 })
 export class ArticleController {
@@ -60,6 +64,12 @@ export class ArticleController {
     createFullArticle(@Body() data: AddArticleDto) {
         return this.service.createFullArticle(data);
     }
+
+    @Patch(':id') // PATCH http://localhost:3000/api/article/2/
+    editFullArticle(@Param('id') id: number, @Body() data: EditArticleDto) {
+        return this.service.editFullArticle(id, data);
+    }
+
 
     @Post(':id/uploadPhoto/') // POST http://localhost:3000/api/article/:id/uploadPhoto
     @UseInterceptors(
